@@ -10,7 +10,6 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
-    include: ['**/*.{test,spec}.{js,ts,vue}'],  // 可选：指定测试文件
-
+    include: ['src/**/*.{test,spec}.{js,ts}'],
   },
 })
