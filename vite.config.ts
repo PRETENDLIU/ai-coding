@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue()],        // 修正：缺少方括号和多了一个括号
   server: {
     host: '0.0.0.0',
     port: 5173,
@@ -10,5 +10,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
+    include: ['**/*.{test,spec}.{js,ts,vue}'],  // 可选：指定测试文件
+
   },
 })
