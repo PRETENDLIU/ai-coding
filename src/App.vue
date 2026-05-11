@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useCloutChase } from './composables/useCloutChase'
+import CommandPanel from './components/CommandPanel.vue'
+
 const {
   state, gameStarted, currentEvent, eventResult, dayLog, followerProgress,
   choices, startGame, postContent, handleEvent, dismissEvent, reset, fmt,
   showSkillPanel, showMilestonePanel, buySkill, claimMilestone,
   floatingTexts, levelProgress, xpToNext, unclaimedMilestones,
 } = useCloutChase()
+
+const showCommandPanel = ref(false)
 
 const platforms = [
   { id: 'tiktok' as const, label: 'TikTok', emoji: '🎵', desc: '短视频之王，涨粉快' },
@@ -32,6 +37,15 @@ const platforms = [
         <span class="plat-name">{{ p.label }}</span>
         <small class="plat-desc">{{ p.desc }}</small>
       </button>
+    </div>
+    <button class="cmd-entry-btn" @click="showCommandPanel = true">⚙️ 自动化命令</button>
+
+    <!-- Command Panel (start screen) -->
+    <div v-if="showCommandPanel" class="overlay" @click.self="showCommandPanel = false">
+      <div class="modal">
+        <CommandPanel />
+        <button class="ev-dismiss" @click="showCommandPanel = false">关闭</button>
+      </div>
     </div>
   </div>
 
@@ -82,6 +96,7 @@ const platforms = [
       <span v-if="state.streak > 1" class="streak">🔗 连击 x{{ state.streak }}</span>
       <button class="tab-btn" :class="{ notify: unclaimedMilestones > 0 }" @click="showMilestonePanel = !showMilestonePanel">🏆 里程碑{{ unclaimedMilestones > 0 ? ' (' + unclaimedMilestones + ')' : '' }}</button>
       <button class="tab-btn" @click="showSkillPanel = !showSkillPanel">🎓 技能</button>
+      <button class="tab-btn" @click="showCommandPanel = !showCommandPanel">⚙️ 命令</button>
     </div>
 
     <div class="board">
@@ -150,6 +165,14 @@ const platforms = [
           </div>
         </div>
         <button class="ev-dismiss" @click="showMilestonePanel = false">关闭</button>
+      </div>
+    </div>
+
+    <!-- Command Panel -->
+    <div v-if="showCommandPanel" class="overlay" @click.self="showCommandPanel = false">
+      <div class="modal">
+        <CommandPanel />
+        <button class="ev-dismiss" @click="showCommandPanel = false">关闭</button>
       </div>
     </div>
 
@@ -267,4 +290,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .claim-btn{padding:3px 10px;border:none;border-radius:6px;background:#feca57;color:#000;font-size:.75rem;font-weight:bold;cursor:pointer;margin-left:auto}
 .claimed-tag{color:#43e97b;margin-left:auto}
 .locked-tag{margin-left:auto;opacity:.4}
+.cmd-entry-btn{margin-top:24px;padding:10px 24px;border:1px solid #555;border-radius:10px;background:rgba(255,255,255,.05);color:#ccc;font-size:.9rem;cursor:pointer;transition:all .2s}
+.cmd-entry-btn:hover{border-color:#4facfe;background:rgba(79,172,254,.1);color:#fff}
 </style>
